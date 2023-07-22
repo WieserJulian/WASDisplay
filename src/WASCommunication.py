@@ -31,8 +31,7 @@ class WASCommunication:
     def readSocket(self):
         """ Single Read """
         if self.DEBUG:
-            for data in get_testDataGenerator(1):
-                self.processOperation(data)
+            self.processOperation(get_testDataGenerator(1))
             return
         data = b""
         try:
@@ -51,6 +50,8 @@ class WASCommunication:
 
     def processOperation(self, data):
         # log2file(data)
+        if data is None:
+            return
         try:
             xml_tree = ET.fromstring(data)
         except ET.ParseError:

@@ -136,7 +136,7 @@ testdata = [
                         <name>TEST</name>
                         <operation-name>TEST WAS-ENDSTELLE</operation-name>
                         <caller>069910149977</caller>
-                    <location>BÄCKERSTRAßE 11 STRAßHAM ALKOVEN Zwo</location>
+                        <location>BÄCKERSTRAßE 11 STRAßHAM ALKOVEN Zwo</location>
                         <info>TEST</info>
                         <program>Stiller Alarm oHT</program>
                         <status>Ausgerückt</status>
@@ -180,13 +180,15 @@ testdata = [
             </order-list>
     </pdu>"""
 ]
-
-
+global i
+i = 0
 def get_testDataGenerator(wait_time: float):
-    i = 0
-    yield testdata[i]
+    global i
     if i == len(testdata):
         i = 0
+        # return
+    i += 1
+    return testdata[i - 1]
     # while True:
     # yield testdata[i]
     # time.sleep(wait_time)

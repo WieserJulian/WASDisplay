@@ -11,6 +11,7 @@ from concurrent import futures
 import customtkinter
 
 from src.WASCommunication import WASCommunication
+from src.WASTextFrame import WASTextFrame
 
 DEBUG = True
 
@@ -23,21 +24,24 @@ class Display(customtkinter.CTk):
         self.title("WAS Erweiterungs Oberfläche")
         # self.overrideredirect(True)
         self.geometry("{0}x{1}+0+0".format(self.winfo_screenwidth(), self.winfo_screenheight()))
+        self.grid_rowconfigure(2, weight=1)
+        self.grid_columnconfigure(2, weight=1)
         # add widgets to app
         self.wasCommunication = WASCommunication(self, DEBUG)
-        self.button = customtkinter.CTkButton(self, command=self.button_click)
-        self.button.grid(row=0, column=0, padx=20, pady=10)
-        self.bind("<<WASCommunication>>", self.change_WAS)
+        self.wasFrame = WASTextFrame(self)
+        self.wasFrame.grid(row=0, column=0, padx=20, pady=20, sticky="nsew")
+
         # Start Thread for WAS Communication
+
+        self.bind("<<WASCommunication>>", self.changeWAS)
         self.communicate_WAS()
 
-    # add methods to app
     def button_click(self):
         print("button click")
 
     def communicate_WAS(self):
-        threading.Thread(self.wasCommunication.readSocket()).start()
-        self.after(5000, self.communicate_WAS())
+        self.wasCommunication.readSocket()
+        self.after(2000, self.communicate_WAS)
 
-    def change_WAS(self, event):
-        print(self.wasCommunication.active_operations)
+    def changeWAS(self, event):
+        self.wasFrame.changeWAS(self.wasCommunication.active_operations)

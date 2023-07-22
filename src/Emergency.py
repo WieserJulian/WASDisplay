@@ -6,6 +6,7 @@
 #  * permission of Julian Wieser
 #  *******************************************************
 class Emergency(object):
+    origin = ''
     id = ''
     level = ''
     name = ''
@@ -21,7 +22,9 @@ class Emergency(object):
 
     def __init__(self, xmlOrder):
         for field in xmlOrder:
-            if field.tag == "operation-id":
+            if field.tag == "origin":
+                self.origin = field.text
+            elif field.tag == "operation-id":
                 self.id = field.text
             elif field.tag == "level":
                 self.level = field.text
