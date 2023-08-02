@@ -12,8 +12,6 @@ import xml.etree.ElementTree as ET
 from src.Emergency import Emergency
 from src.TestData import get_testDataGenerator
 
-HOST = '192.168.130.100'
-PORT = 47000
 
 
 class WASCommunication:

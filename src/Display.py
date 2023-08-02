@@ -5,7 +5,6 @@
 #  * This project can not be copied and/or distributed without the express
 #  * permission of Julian Wieser
 #  *******************************************************
-import threading
 from concurrent import futures
 
 import customtkinter
@@ -21,11 +20,10 @@ thread_pool_executor = futures.ThreadPoolExecutor(max_workers=1)
 class Display(customtkinter.CTk):
     def __init__(self):
         super().__init__()
-        self.title("WAS Erweiterungs Oberfläche")
-        # self.overrideredirect(True)
-        self.geometry("{0}x{1}+0+0".format(self.winfo_screenwidth(), self.winfo_screenheight()))
-        self.grid_rowconfigure(2, weight=1)
-        self.grid_columnconfigure(2, weight=1)
+        #TODO
+        # load setting from config.yml
+        self.__load_config()
+
         # add widgets to app
         self.wasCommunication = WASCommunication(self, DEBUG)
         self.wasFrame = WASTextFrame(self)
@@ -35,6 +33,17 @@ class Display(customtkinter.CTk):
 
         self.bind("<<WASCommunication>>", self.changeWAS)
         self.communicate_WAS()
+
+    def __load_config(self):
+        global DEBUG
+        self.title("WAS Erweiterungs Oberfläche")
+        if not DEBUG:
+            self.overrideredirect(True)
+        customtkinter.set_appearance_mode("light")
+        customtkinter.set_widget_scaling(1)
+        self.geometry("{0}x{1}+0+0".format(self.winfo_screenwidth(), self.winfo_screenheight()))
+        self.grid_rowconfigure(1, weight=1)
+        self.grid_columnconfigure(0, weight=1)
 
     def button_click(self):
         print("button click")

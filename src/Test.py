@@ -8,8 +8,6 @@
 import math
 
 import osmnx as ox
-from osmnx import geocoder
-from osmnx.utils_geo import bbox_from_point
 
 
 # place_depo = "Rutzenham, Austria"
@@ -64,11 +62,11 @@ def distance(origin, destination):
 
 G = ox.graph_from_place("Rutzenham, Austria", simplify=False)
 place_depo = "Bach 49, Rutzenham, Austria"
-place_emergency = "Pühret 1, Pühret, Austria"
+place_emergency = "Altensham 1, Pühret, Austria"
 tags = {"building": True}
 gdf_depo = ox.features_from_place(place_depo, tags)
 gdf_emergency = ox.features_from_place(place_emergency, tags)
-#TODO Rework
+# TODO Rework
 depo_way, _ = ox.nearest_nodes(G, gdf_depo.centroid.x.values, gdf_depo.centroid.y.values, return_dist=True)
 emergency_way, _ = ox.nearest_nodes(G, gdf_emergency.centroid.x.values, gdf_emergency.centroid.y.values,
                                     return_dist=True)
@@ -83,3 +81,15 @@ fig, ax = ox.plot_graph(G_middle, show=False, node_size=0, edge_linewidth=2)
 fig, ax = ox.plot_footprints(gdf, ax=ax, alpha=0.4, show=False)
 fig, ax = ox.plot_graph_route(G_middle, route, ax=ax, route_color="r", route_linewidth=6)
 pass
+
+
+def get_nearest_middle_node(gdf_depo, gdf_emergency):
+    dist = int(distance((gdf_depo.centroid.x.values, gdf_depo.centroid.y.values),
+                        (gdf_emergency.centroid.x.values, gdf_emergency.centroid.y.values)) * 1000)
+    middle_point = (((gdf_depo.centroid.x.values + gdf_emergency.centroid.x.values) / 2)[0],
+                    ((gdf_depo.centroid.y.values + gdf_emergency.centroid.y.values) / 2)[0])
+    G_overview = ox.graph_from_address(place_depo, dist=dist, simplify=True, retain_all=True, network_type="all")
+    middle_node = ox.nearest_nodes(G_overview, middle_point[0], middle_point[1])
+    G_middle_drive = ox.graph_from_point((middle_node["x"], middle_node["y"]), network_type="drive", dist=int(dist/2))
+    G_middle_overview = ox.graph_from_point((middle_node["x"], middle_node["y"]), network_type="drive", dist=int(dist/2))
+    return G_middle_drive, G_middle_overview

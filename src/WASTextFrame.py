@@ -4,12 +4,14 @@ from PIL import Image
 from customtkinter import CTkFrame, CTkLabel, CTkFont, CTkImage, CTkRadioButton
 
 from src.Emergency import Emergency
+from src.NavigationFrame import NavigationFrame
 
 
 class WASTextFrame(CTkFrame):
     def __init__(self, master, **kwargs):
         super().__init__(master, **kwargs)
         self.master = master
+        self.grid_columnconfigure(0, weight=1)
         self.allEmergency = []
         self.allEmergencyIDs = []
 
@@ -28,7 +30,7 @@ class WASTextFrame(CTkFrame):
 
     def addEmergency(self, emergency: Emergency):
         emergency_frame = CTkFrame(self)
-        emergency_frame.grid_columnconfigure(1, weight=1)
+        emergency_frame.grid_columnconfigure(2, weight=1)
         emergency_frame.grid_rowconfigure(5, weight=1)
         font = CTkFont(size=32)
 
@@ -58,8 +60,10 @@ class WASTextFrame(CTkFrame):
         traffic_light_label = CTkLabel(emergency_frame, image=traffic_light, text="")
         traffic_light_label.grid(row=0, rowspan=6, column=1, padx = (0, 10), pady=0, sticky="nes")
 
+        route = NavigationFrame(emergency_frame)
+        route.grid(row=0, rowspan=6, column=2, padx=(0, 10), pady=0, sticky="nesw")
 
-        emergency_frame.grid(row=len(self.allEmergency), column=0, padx=20, pady=10)
+        emergency_frame.grid(row=len(self.allEmergency), column=0, padx=20, pady=10, sticky="nesw")
         self.allEmergency.append(emergency_frame)
         self.allEmergencyIDs.append(emergency.id)
 
@@ -67,7 +71,7 @@ class WASTextFrame(CTkFrame):
         frame: CTkFrame = self.allEmergency[self.allEmergencyIDs.index(emergency.id)]
         traffic_light = CTkImage(light_image=Image.open(r"./assets/standing_yellow_flash.gif"),
                                  dark_image=Image.open(r"./assets/standing_yellow_flash.gif"), size=(100, 250))
-        frame.children[list(frame.children.keys())[-1]].configure(image=traffic_light)
+        frame.children[list(frame.children.keys())[-2]].configure(image=traffic_light)
 
     def deleteEmergency(self, to_remove: list):
         for rem in to_remove:
