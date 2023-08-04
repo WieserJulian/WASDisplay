@@ -2,6 +2,7 @@ import re
 
 from PIL import Image
 from customtkinter import CTkFrame, CTkLabel, CTkFont, CTkImage, CTkRadioButton
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 from src.Emergency import Emergency
 from src.NavigationFrame import NavigationFrame
@@ -60,7 +61,9 @@ class WASTextFrame(CTkFrame):
         traffic_light_label = CTkLabel(emergency_frame, image=traffic_light, text="")
         traffic_light_label.grid(row=0, rowspan=6, column=1, padx = (0, 10), pady=0, sticky="nes")
 
-        route = NavigationFrame(emergency_frame)
+        # route = NavigationFrame(emergency_frame, emergency)
+
+        route = FigureCanvasTkAgg(emergency.navigation_Figure, master=emergency_frame).get_tk_widget()
         route.grid(row=0, rowspan=6, column=2, padx=(0, 10), pady=0, sticky="nesw")
 
         emergency_frame.grid(row=len(self.allEmergency), column=0, padx=20, pady=10, sticky="nesw")

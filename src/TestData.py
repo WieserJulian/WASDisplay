@@ -19,7 +19,7 @@ testdata = [
                         <name>TEST</name>
                         <operation-name>TEST WAS-ENDSTELLE 1</operation-name>
                         <caller></caller>
-                        <location>BÄCKERSTRAßE 11 STRAßHAM ALKOVEN</location>
+                        <location>BACH 4 RUTZENHAM RUTZENHAM</location>
                         <info>TEST</info>
                         <program>Stiller Alarm oHT</program>
                         <status>Alarmiert</status>
@@ -44,7 +44,7 @@ testdata = [
                         <name>TEST</name>
                         <operation-name>TEST WAS-ENDSTELLE 1</operation-name>
                         <caller></caller>
-                        <location>BÄCKERSTRAßE 11 STRAßHAM ALKOVEN</location>
+                        <location>BACH 4 RUTZENHAM RUTZENHAM</location>
                         <info>TEST</info>
                         <program>Stiller Alarm oHT</program>
                         <status>Ausgerückt</status>
@@ -69,7 +69,7 @@ testdata = [
                         <name>TEST</name>
                         <operation-name>TEST WAS-ENDSTELLE 1</operation-name>
                         <caller></caller>
-                        <location>BÄCKERSTRAßE 11 STRAßHAM ALKOVEN</location>
+                        <location>BACH 4 RUTZENHAM RUTZENHAM</location>
                         <info>TEST</info>
                         <program>Stiller Alarm oHT</program>
                         <status>Ausgerückt</status>
@@ -90,7 +90,7 @@ testdata = [
                         <name>TEST</name>
                         <operation-name>TEST WAS-ENDSTELLE Zwo</operation-name>
                         <caller>069910149977</caller>
-                        <location>BÄCKERSTRAßE 11 STRAßHAM ALKOVEN</location>
+                        <location>Altensam 1 Pühret Pühret</location>
                         <info>TEST</info>
                         <program>Stiller Alarm oHT</program>
                         <status>Alarmiert</status>
@@ -115,7 +115,7 @@ testdata = [
                         <name>TEST</name>
                         <operation-name>TEST WAS-ENDSTELLE</operation-name>
                         <caller></caller>
-                        <location>BÄCKERSTRAßE 11 STRAßHAM ALKOVEN 1</location>
+                        <location>BACH 4 RUTZENHAM RUTZENHAM</location>
                         <info>TEST</info>
                         <program>Stiller Alarm oHT</program>
                         <status>Ausgerückt</status>
@@ -136,7 +136,7 @@ testdata = [
                         <name>TEST</name>
                         <operation-name>TEST WAS-ENDSTELLE</operation-name>
                         <caller>069910149977</caller>
-                        <location>BÄCKERSTRAßE 11 STRAßHAM ALKOVEN Zwo</location>
+                        <location>Altensam 1 Pühret Pühret</location>
                         <info>TEST</info>
                         <program>Stiller Alarm oHT</program>
                         <status>Ausgerückt</status>
@@ -161,7 +161,7 @@ testdata = [
                 <name>TEST</name>
                 <operation-name>TEST WAS-ENDSTELLE Zwo</operation-name>
                 <caller>069910149977</caller>
-                <location>BÄCKERSTRAßE 11 STRAßHAM ALKOVEN</location>
+                <location>Altensam 1 Pühret Pühret</location>
                 <info>TEST</info>
                 <program>Stiller Alarm oHT</program>
                 <status>Ausgerückt</status>

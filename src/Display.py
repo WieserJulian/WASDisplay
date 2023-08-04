@@ -5,10 +5,12 @@
 #  * This project can not be copied and/or distributed without the express
 #  * permission of Julian Wieser
 #  *******************************************************
+import tkinter
 from concurrent import futures
 
 import customtkinter
 
+from src.MenuBar import MenuBar
 from src.WASCommunication import WASCommunication
 from src.WASTextFrame import WASTextFrame
 
@@ -20,7 +22,7 @@ thread_pool_executor = futures.ThreadPoolExecutor(max_workers=1)
 class Display(customtkinter.CTk):
     def __init__(self):
         super().__init__()
-        #TODO
+        # TODO
         # load setting from config.yml
         self.__load_config()
 
@@ -32,6 +34,8 @@ class Display(customtkinter.CTk):
         # Start Thread for WAS Communication
 
         self.bind("<<WASCommunication>>", self.changeWAS)
+
+        self.configure(menu=MenuBar(self))
         self.communicate_WAS()
 
     def __load_config(self):

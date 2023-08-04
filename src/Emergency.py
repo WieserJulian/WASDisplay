@@ -19,6 +19,7 @@ class Emergency(object):
     receiveTad = ''
     watchOutTad = ''
     finishedTad = ''
+    navigation_Figure = None
 
     def __init__(self, xmlOrder):
         for field in xmlOrder:
