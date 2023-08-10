@@ -12,10 +12,12 @@ class App(customtkinter.CTk):
         self.geometry("600x500")
         self.title("Test Sender")
         self.command = ""
-        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-            s.bind(('localhost', 36258))
-            s.listen(1)
-            self.socket, _ = s.accept()
+
+        self.status = customtkinter.CTkLabel(self, text="UnConnected")
+        self.status.pack()
+
+        self.connect = customtkinter.CTkButton(self, text="Connect", command=self.connect_fc)
+        self.connect.pack()
 
         self.operation_id = customtkinter.CTkLabel(self, text="E"+uuid.uuid4().__str__())
         self.operation_id.pack()
@@ -30,14 +32,19 @@ class App(customtkinter.CTk):
 
 
         # add widgets to app
-        self.send = customtkinter.CTkButton(self, command=self.send)
+        self.send = customtkinter.CTkButton(self,text="Send", command=self.send)
         self.send.pack()
 
+    def connect_fc(self):
+        self.status.configure(text="Connected")
     # add methods to app
     def send(self):
         self.build_command()
         x = self.command.encode('utf-8')
-        self.socket.send(x)
+        s = socket.socket()
+        s.connect(('localhost', 8080))
+        s.send(x)
+        s.close()
 
     def build_command(self):
         if (self.operation_state.get() == 'Fertig'):
