@@ -15,7 +15,8 @@ class App(customtkinter.CTk):
         self.all_emergency = {}
         self.all_em_frame = []
 
-        self.status = customtkinter.CTkLabel(self, text="UnConnected", font=customtkinter.CTkFont(size=24), text_color='red')
+        self.status = customtkinter.CTkLabel(self, text="UnConnected", font=customtkinter.CTkFont(size=24),
+                                             text_color='red')
         self.status.pack()
 
         self.test_emergency_frame = customtkinter.CTkFrame(self, height=20)
@@ -29,7 +30,8 @@ class App(customtkinter.CTk):
 
     def add_em(self):
         frame = customtkinter.CTkFrame(self.test_emergency_frame)
-        operation_id = customtkinter.CTkLabel(frame, text="E" + uuid.uuid4().__str__(), font=customtkinter.CTkFont(size=10))
+        operation_id = customtkinter.CTkLabel(frame, text="E" + uuid.uuid4().__str__(),
+                                              font=customtkinter.CTkFont(size=10))
         operation_id.grid(row=0, column=0, padx=5)
         operation_name = customtkinter.CTkEntry(frame, placeholder_text="Test Alarm")
         operation_name.grid(row=0, column=1, padx=5)
@@ -38,15 +40,20 @@ class App(customtkinter.CTk):
         operation_state = customtkinter.CTkOptionMenu(frame, values=['None', 'Alarmiert', 'Ausgerückt', 'Fertig'])
         operation_state.set('None')
         operation_state.grid(row=0, column=3, padx=5)
-        send = customtkinter.CTkButton(frame, text="Rebuild", command=lambda:self.rebuild_em(operation_id.cget('text'),
-                                                                                     operation_name.get(),
-                                                                                     operation_address.get(),
-                                                                                     operation_state.get()))
+        send = customtkinter.CTkButton(frame, text="Rebuild", command=lambda: self.rebuild_em(operation_id.cget('text'),
+                                                                                              operation_name.get(),
+                                                                                              operation_address.get(),
+                                                                                              operation_state.get()))
         send.grid(row=0, column=4, padx=5)
-        destroy = customtkinter.CTkButton(frame, text="Delete", command=lambda: frame.destroy())
+        destroy = customtkinter.CTkButton(frame, text="Delete", command=lambda: self.delete_em(frame, operation_id.cget('text')))
         destroy.grid(row=0, column=5, padx=5)
         frame.grid(row=len(self.all_em_frame), pady=5)
         self.all_em_frame.append(frame)
+
+    def delete_em(self, frame, id):
+        self.all_emergency.pop(id)
+        frame.destroy()
+        self.build_command()
 
     def rebuild_em(self, id, name, address, state):
         emergency = [name, address, state]
@@ -87,17 +94,15 @@ class App(customtkinter.CTk):
         if len(self.all_emergency.keys()) <= 0:
             self.command = "<pdu></pdu>"
         else:
-            self.command = "<pdu>"
-            for em_id in self.all_emergency.keys():
+            self.command = f"""<pdu><order-list count="{len(self.all_emergency.keys())}" """
+            for index, em_id in enumerate(self.all_emergency.keys()):
                 em = self.all_emergency[em_id]
-                self.command += f"""
-                            <order-list count="1">
-                                <order index="1">
+                self.command += f""">
+                                <order index="{index}">
                                         <key>0x016d48b8</key>
                                         <origin tid="0000000">LFKOO</origin>
                                         <receive-tad>2019-11-06 17:58:49</receive-tad>
-                                        <operation-id>{em_id}</operation-id>
-                                        <level>1</level>
+                                        <operation-id>{em_id}</operation-id><level>1</level>
                                         <name>TEST</name>
                                         <operation-name>{em[0]}</operation-name>
                                         <caller></caller>
@@ -112,10 +117,9 @@ class App(customtkinter.CTk):
                                         </destination-list>
                                         <paging-destination-list count="0">
                                         </paging-destination-list>
-                                </order>
-                            </order-list>
+                                </order> 
                     """
-            self.command += "</pdu>"
+            self.command += "</order-list></pdu>"
 
 
 if __name__ == '__main__':
