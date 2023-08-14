@@ -68,14 +68,32 @@ def x():
     # A List containing the system printers
     all_printers = [printer[2] for printer in win32print.EnumPrinters(2)]
     # Ask the user to select a printer
-    printer_num = int(input("Choose a printer:\n"+"\n".join([f"{n} {p}" for n, p in enumerate(all_printers)])+"\n"))
+    printer_num = int(input("Choose a printer:\n" + "\n".join([f"{n} {p}" for n, p in enumerate(all_printers)]) + "\n"))
     # set the default printer
     win32print.SetDefaultPrinter(all_printers[printer_num])
     pdf_dir = r"EINSATZ_INFO.pdf"
     for f in glob(pdf_dir, recursive=True):
-        win32api.ShellExecute(0, "print", f, None,  ".",  0)
+        win32api.ShellExecute(0, "print", f, None, ".", 0)
 
     input("press any key to exit")
 
+def windows_print():
+    pass
+
+def linux_print():
+    import os
+    os.startfile("EINSATZ_INFO.pdf", "print")
+
+
+
+
 if __name__ == '__main__':
-    x()
+    import platform
+    match platform.system():
+        case "Windows":
+            print("Execute Windows API Code")
+        case "Linux":
+            print("Execute Linux Code")
+        case "Java":
+            print("ALL Wrong")
+
