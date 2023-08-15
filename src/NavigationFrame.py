@@ -7,8 +7,8 @@ import osmnx.distance
 from customtkinter import CTkFrame
 import osmnx as ox
 
-from src.Emergency import Emergency
-from src.config import Config
+from Emergency import Emergency
+from config import Config
 
 
 class NavigationFrame(CTkFrame):

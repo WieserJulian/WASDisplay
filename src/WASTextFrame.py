@@ -5,8 +5,8 @@ from PIL import Image
 from customtkinter import CTkFrame, CTkLabel, CTkFont, CTkImage, CTkRadioButton
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
-from src.Emergency import Emergency
-from src.NavigationFrame import NavigationFrame
+from Emergency import Emergency
+from NavigationFrame import NavigationFrame
 
 
 class WASTextFrame(CTkFrame):

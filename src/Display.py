@@ -10,9 +10,9 @@ from concurrent import futures
 
 import customtkinter
 
-from src.MenuBar import MenuBar
-from src.WASCommunication import WASCommunication
-from src.WASTextFrame import WASTextFrame
+from MenuBar import MenuBar
+from WASCommunication import WASCommunication
+from WASTextFrame import WASTextFrame
 
 DEBUG = True
 

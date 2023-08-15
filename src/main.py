@@ -1,5 +1,5 @@
-from src.Display import Display
-from src.config import Config
+from Display import Display
+from config import Config
 import logging
 
 if __name__ == '__main__':

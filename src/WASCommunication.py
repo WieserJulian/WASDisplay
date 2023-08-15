@@ -15,9 +15,9 @@ import xml.etree.ElementTree as ET
 import osmnx.distance
 import osmnx as ox
 
-from src.Emergency import Emergency
-from src.TestData import get_testDataGenerator
-from src.config import Config
+from Emergency import Emergency
+from TestData import get_testDataGenerator
+from config import Config
 
 
 class WASCommunication:
