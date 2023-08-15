@@ -11,17 +11,16 @@ class Config(object):
             self.__all_settings = yaml.safe_load(file)
             self.server = self.__all_settings['server']
             self.default = self.__all_settings['default']
-            if self.__all_settings['default']['init_addr'] == self.default['place_depo']:
-                self.g_overview = ox.load_graphml("save/graph_overview")
-                self.g_drive = ox.load_graphml("save/graph_drive")
-                tags = {'building': True}
-                self.gdf_depo = ox.features_from_place(self.default['place_depo'], tags)
-                self.depo_way = self.__all_settings['default']['depo_way']
-                with open('save/ax.pickle','rb') as fid:
-                    self.generated_plot = None, pickle.load(fid)
-
-            else:
-                self.load_graphs()
+            # if self.__all_settings['default']['init_addr'] == self.default['place_depo']:
+            #     self.g_overview = ox.load_graphml("save/graph_overview")
+            #     self.g_drive = ox.load_graphml("save/graph_drive")
+            #     tags = {'building': True}
+            #     self.gdf_depo = ox.features_from_place(self.default['place_depo'], tags)
+            #     self.depo_way = self.__all_settings['default']['depo_way']
+            #     with open('save/ax.pickle','rb') as fid:
+            #         self.generated_plot = None, pickle.load(fid)
+            # else:
+            #     self.load_graphs()
 
     def load_graphs(self):
             self.g_overview = ox.graph_from_address(self.default['place_depo'], dist=15_000, network_type="all_private", simplify=False,

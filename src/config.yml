@@ -9,4 +9,4 @@ server:
   host: 192.168.130.100
   debug_host: 127.0.0.1
   port: 47000
-  debug_port: 65432
+  debug_port: 8080

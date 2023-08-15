@@ -1,3 +1,4 @@
+import logging
 import re
 
 from PIL import Image
@@ -12,15 +13,15 @@ class WASTextFrame(CTkFrame):
     def __init__(self, master, **kwargs):
         super().__init__(master, **kwargs)
         self.master = master
-        self.grid_columnconfigure(0, weight=1)
+        # self.grid_columnconfigure(0, weight=1)
+        self.offset_state = -1
         self.allEmergency = []
         self.allEmergencyIDs = []
 
     def changeWAS(self, active_operations: dict):
-
         for emergency_id in active_operations.keys():
             emergency = active_operations[emergency_id]
-            if emergency.status == 'Alarmiert':
+            if emergency.status == 'Alarmiert' and emergency_id not in self.allEmergencyIDs:
                 self.addEmergency(emergency)
             elif len(self.allEmergencyIDs - active_operations.keys()) != 0:
                 self.deleteEmergency(self.allEmergencyIDs - active_operations.keys())
@@ -61,12 +62,7 @@ class WASTextFrame(CTkFrame):
         traffic_light_label = CTkLabel(emergency_frame, image=traffic_light, text="")
         traffic_light_label.grid(row=0, rowspan=6, column=1, padx = (0, 10), pady=0, sticky="nes")
 
-        # route = NavigationFrame(emergency_frame, emergency)
-
-        route = FigureCanvasTkAgg(emergency.navigation_Figure, master=emergency_frame).get_tk_widget()
-        route.grid(row=0, rowspan=6, column=2, padx=(0, 10), pady=0, sticky="nesw")
-
-        emergency_frame.grid(row=len(self.allEmergency), column=0, padx=20, pady=10, sticky="nesw")
+        emergency_frame.pack(anchor="center", pady=5, padx=1)
         self.allEmergency.append(emergency_frame)
         self.allEmergencyIDs.append(emergency.id)
 
@@ -74,7 +70,7 @@ class WASTextFrame(CTkFrame):
         frame: CTkFrame = self.allEmergency[self.allEmergencyIDs.index(emergency.id)]
         traffic_light = CTkImage(light_image=Image.open(r"./assets/standing_yellow_flash.gif"),
                                  dark_image=Image.open(r"./assets/standing_yellow_flash.gif"), size=(100, 250))
-        frame.children[list(frame.children.keys())[-2]].configure(image=traffic_light)
+        frame.children[list(frame.children.keys())[self.offset_state]].configure(image=traffic_light)
 
     def deleteEmergency(self, to_remove: list):
         for rem in to_remove:

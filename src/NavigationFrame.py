@@ -24,9 +24,9 @@ class NavigationFrame(CTkFrame):
         tags = {"building": True}
         gdf_depo = ox.features_from_place(Config().default['place_depo'], tags)
         gdf_emergency = ox.features_from_place(self.emergency.location + " AUSTRIA", tags)
-        s = time.time()
+
         G_middle_drive, G_middle_overview, gdf, route = self.get_nearest_middle_node(g_overview,gdf_depo, gdf_emergency, tags)
-        print("generate ", time.time() - s)
+
 
 
 

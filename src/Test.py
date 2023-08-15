@@ -1,5 +1,11 @@
-# Python program to create
-# a pdf file
+#  ******************************************************
+#  * Copyright (C) 2023 Julian Wieser
+#  * julian.wieser@i-wieser.com
+#  *
+#  * This project can not be copied and/or distributed without the express
+#  * permission of Julian Wieser
+#  *******************************************************
+
 import re
 
 from fpdf import FPDF
@@ -83,9 +89,6 @@ def windows_print():
 def linux_print():
     import os
     os.startfile("EINSATZ_INFO.pdf", "print")
-
-
-
 
 if __name__ == '__main__':
     import platform
