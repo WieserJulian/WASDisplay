@@ -22,8 +22,6 @@ thread_pool_executor = futures.ThreadPoolExecutor(max_workers=1)
 class Display(customtkinter.CTk):
     def __init__(self):
         super().__init__()
-        # TODO
-        # load setting from config.yml
         self.__load_config()
 
         # add widgets to app
@@ -48,9 +46,6 @@ class Display(customtkinter.CTk):
         self.geometry("{0}x{1}+0+0".format(self.winfo_screenwidth(), self.winfo_screenheight()))
         self.grid_rowconfigure(1, weight=1)
         self.grid_columnconfigure(0, weight=1)
-
-    def button_click(self):
-        print("button click")
 
     def communicate_WAS(self):
         self.wasCommunication.readSocket()
