@@ -8,6 +8,7 @@
 import logging
 import math
 import socket
+import threading
 import time
 import xml.etree.ElementTree as ET
 
@@ -34,6 +35,9 @@ class WASCommunication:
         """ Single Read """
         logging.debug("[*] Start trying to read Socket")
         data = b""
+        if self.client is None:
+            logging.error("[!] Client not accepted")
+            return
         try:
             if not self.DEBUG:
                 self.client.send(b'get-alarms')
@@ -63,6 +67,9 @@ class WASCommunication:
             self.socket.bind((self.config.server['debug_host'], self.config.server['debug_port']))
             logging.debug(f"[*] Listening as {self.config.server['debug_host']}:{self.config.server['debug_port']}")
         self.socket.listen(5)
+        threading.Thread(target=self.wait_for_accept).start()
+
+    def wait_for_accept(self):
         self.client, address = self.socket.accept()
         logging.debug(f"[+] {address} is connected.")
 

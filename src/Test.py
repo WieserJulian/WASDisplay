@@ -7,6 +7,9 @@
 #  *******************************************************
 
 import re
+import socket
+import threading
+import time
 
 from fpdf import FPDF
 
@@ -90,7 +93,8 @@ def linux_print():
     import os
     os.startfile("EINSATZ_INFO.pdf", "print")
 
-if __name__ == '__main__':
+def test_os_test():
+
     import platform
     match platform.system():
         case "Windows":
@@ -100,3 +104,14 @@ if __name__ == '__main__':
         case "Java":
             print("ALL Wrong")
 
+def axcc():#
+    time.sleep(5)
+    print("Connected")
+
+if __name__ == '__main__':
+    s = socket.socket()
+    s.bind(('127.0.0.1', 8081))
+    s.listen(5)
+    n = threading.Thread(target=axcc)
+    n.start()
+    print("Directly after ")
