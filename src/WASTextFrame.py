@@ -34,7 +34,7 @@ class WASTextFrame(CTkFrame):
         emergency_frame = CTkFrame(self)
         emergency_frame.grid_columnconfigure(2, weight=1)
         emergency_frame.grid_rowconfigure(5, weight=1)
-        font = CTkFont(size=32)
+        font = CTkFont(size=32, weight="bold")
 
         IDandDate = CTkLabel(emergency_frame, font=font, text="ID: {} {}".format(emergency.id, emergency.receiveTad))
         IDandDate.grid(row=0, column=0, padx=20, pady=5)
@@ -57,9 +57,10 @@ class WASTextFrame(CTkFrame):
         additionalInformation.grid(row=5, column=0, padx=20, pady=10)
 
 
-        traffic_light = CTkImage(light_image=Image.open(r"./assets/standing_red_flash.gif"),
-                                 dark_image=Image.open(r"./assets/standing_red_flash.gif"), size=(100, 250))
-        traffic_light_label = CTkLabel(emergency_frame, image=traffic_light, text="")
+        # traffic_light = CTkImage(light_image=Image.open(r"./assets/standing_red_flash.gif"),
+        #                          dark_image=Image.open(r"./assets/standing_red_flash.gif"), size=(100, 250))
+        # traffic_light_label = CTkLabel(emergency_frame, image=traffic_light, text="")
+        traffic_light_label = CTkFrame(emergency_frame, fg_color="red")
         traffic_light_label.grid(row=0, rowspan=6, column=1, padx = (0, 10), pady=0, sticky="nes")
 
         emergency_frame.pack(anchor="center", pady=5, padx=1)
@@ -68,9 +69,9 @@ class WASTextFrame(CTkFrame):
 
     def changeState(self, emergency: Emergency):
         frame: CTkFrame = self.allEmergency[self.allEmergencyIDs.index(emergency.id)]
-        traffic_light = CTkImage(light_image=Image.open(r"./assets/standing_yellow_flash.gif"),
-                                 dark_image=Image.open(r"./assets/standing_yellow_flash.gif"), size=(100, 250))
-        frame.children[list(frame.children.keys())[self.offset_state]].configure(image=traffic_light)
+        # traffic_light = CTkImage(light_image=Image.open(r"./assets/standing_yellow_flash.gif"),
+        #                          dark_image=Image.open(r"./assets/standing_yellow_flash.gif"), size=(100, 250))
+        frame.children[list(frame.children.keys())[self.offset_state]].configure(fg_color="green")
 
     def deleteEmergency(self, to_remove: list):
         for rem in to_remove:

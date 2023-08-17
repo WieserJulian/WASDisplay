@@ -1,9 +1,7 @@
-import uuid
 import socket
+import uuid
 
 import customtkinter
-
-from src.config import Config
 
 
 class App(customtkinter.CTk):
@@ -45,7 +43,8 @@ class App(customtkinter.CTk):
                                                                                               operation_address.get(),
                                                                                               operation_state.get()))
         send.grid(row=0, column=4, padx=5)
-        destroy = customtkinter.CTkButton(frame, text="Delete", command=lambda: self.delete_em(frame, operation_id.cget('text')))
+        destroy = customtkinter.CTkButton(frame, text="Delete",
+                                          command=lambda: self.delete_em(frame, operation_id.cget('text')))
         destroy.grid(row=0, column=5, padx=5)
         frame.grid(row=len(self.all_em_frame), pady=5)
         self.all_em_frame.append(frame)
