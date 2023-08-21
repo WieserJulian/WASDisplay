@@ -49,7 +49,8 @@ class Display(customtkinter.CTk):
             self.geometry("{0}x{1}+0+0".format(self.winfo_screenwidth(), self.winfo_screenheight() - 100))
 
     def close_application(self, x):
-        exit(0)
+        self.destroy()
+        self.wasCommunication.stop_reconnect()
 
     def communicate_WAS(self):
         self.wasCommunication.readSocket()

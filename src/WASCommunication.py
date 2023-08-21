@@ -7,6 +7,7 @@
 #   *******************************************************
 import logging
 import math
+import multiprocessing
 import socket
 import threading
 import time
@@ -22,6 +23,7 @@ from config import Config
 class WASCommunication:
     def __init__(self, root, DEBUG):
         self.client = None
+        self.thread = None
         self.root = root
         self.count_order_list = 0
         self.active_operations = {}
@@ -29,6 +31,7 @@ class WASCommunication:
         self.config = Config()
         self.socket = socket.socket()
         self.reconnect()
+
 
     def readSocket(self):
         """ Single Read """
@@ -66,9 +69,12 @@ class WASCommunication:
             self.socket.bind((self.config.server['debug_host'], self.config.server['debug_port']))
             logging.debug(f"[*] Listening as {self.config.server['debug_host']}:{self.config.server['debug_port']}")
         self.socket.listen(5)
-
-        threading.Thread(target=self.wait_for_accept).start()
-
+        self.thread = multiprocessing.Process(target=self.wait_for_accept)
+        self.thread.start()
+        # threading.Thread(target=self.wait_for_accept)
+    def stop_reconnect(self):
+        if self.thread is not None:
+            self.thread.close()
     def wait_for_accept(self):
         self.client, address = self.socket.accept()
         logging.debug(f"[+] {address} is connected.")
