@@ -16,8 +16,8 @@ import xml.etree.ElementTree as ET
 import osmnx as ox
 import osmnx.distance
 
-from Emergency import Emergency
-from config import Config
+from src.utils.config import Config
+from src.utils.Emergency import Emergency
 
 
 class WASCommunication:
@@ -32,7 +32,6 @@ class WASCommunication:
         self.socket = socket.socket()
         self.reconnect()
 
-
     def readSocket(self):
         """ Single Read """
         logging.debug("[*] Start trying to read Socket")
@@ -46,7 +45,7 @@ class WASCommunication:
             data = self.client.recv(8192)
         except ConnectionError:
             logging.error("[!] Couldnt connect retry")
-            self.reconnect()
+            self.reconnetct_and_clear()
             return
         except IOError as e:
             logging.error("[!] some errror:", e)
@@ -61,7 +60,15 @@ class WASCommunication:
         else:
             logging.debug("data empty --> ending recvloop")
 
+    def reconnetct_and_clear(self):
+        if self.socket is not None:
+            self.socket.close()
+            self.thread = None
+            self.socket = socket.socket()
+        self.reconnect()
+
     def reconnect(self):
+        self.root.event_generate("<<StatusChanged>>", x=0)
         if not self.DEBUG:
             self.socket.bind((self.config.server['host'], self.config.server['port']))
             logging.debug(f"[*] Listening as {self.config.server['host']}:{self.config.server['port']}")
@@ -71,9 +78,14 @@ class WASCommunication:
         self.socket.listen(5)
         self.thread = threading.Thread(target=self.wait_for_accept, daemon=True)
         self.thread.start()
+
     def wait_for_accept(self):
-        self.client, address = self.socket.accept()
-        logging.debug(f"[+] {address} is connected.")
+        try:
+            self.client, address = self.socket.accept()
+            logging.debug(f"[+] {address} is connected.")
+            self.root.event_generate("<<StatusChanged>>", x=1)
+        except:
+            pass
 
     def processOperation(self, data):
         # log2file(data)

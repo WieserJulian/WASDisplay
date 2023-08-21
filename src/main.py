@@ -1,5 +1,5 @@
-from Display import Display
-from config import Config
+from src.tool_frames.Display import Display
+from src.utils.config import Config
 import logging
 
 if __name__ == '__main__':

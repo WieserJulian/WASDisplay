@@ -1,4 +1,6 @@
 import socket
+import threading
+import time
 import uuid
 
 import customtkinter
@@ -13,7 +15,7 @@ class App(customtkinter.CTk):
         self.all_emergency = {}
         self.all_em_frame = []
 
-        self.status = customtkinter.CTkLabel(self, text="UnConnected", font=customtkinter.CTkFont(size=24),
+        self.status = customtkinter.CTkLabel(self, text="NOT Connected", font=customtkinter.CTkFont(size=24),
                                              text_color='red')
         self.status.pack()
 
@@ -21,10 +23,16 @@ class App(customtkinter.CTk):
         self.test_emergency_frame.pack()
         self.add_button = customtkinter.CTkButton(self, text="Add Emergency", command=self.add_em)
         self.add_button.pack()
-
+        self.status_action = customtkinter.CTkLabel(self, text="[!] Try reconnect")
+        self.status_action.pack(anchor=customtkinter.S)
+        self.protocol("WM_DELETE_WINDOW", self.on_closing)
         # add widgets to app
-        self.reconnect()
+        self.socket = socket.socket()
         self.after(1000, self.send_fc)
+
+    def on_closing(self):
+        self.socket.close()
+        self.destroy()
 
     def add_em(self):
         frame = customtkinter.CTkFrame(self.test_emergency_frame)
@@ -71,23 +79,28 @@ class App(customtkinter.CTk):
     def send_fc(self):
         x = self.command.encode('iso-8859-15')
         try:
+            self.status_action.configure(text="Sending all 2sec: " + ("Leerliste" if self.command == "<pdu></pdu>" else "Alarmliste"))
             self.socket.send(x)
-            print(x)
+            self.after(2000, self.send_fc)
         except (ConnectionRefusedError, OSError):
-            self.reconnect()
-        self.after(2000, self.send_fc)
+            threading.Thread(target=self.reconnect, daemon=True).start()
 
     def reconnect(self):
-        print("[!] Try reconnect")
-        try:
-            host = "localhost"
-            port = 8080
-            self.socket = socket.socket()
-            self.socket.connect((host, port))
-            self.status.configure(text="Connected", text_color='green')
-        except:
-            self.status.configure(text="NOT Connected", text_color='red')
-            self.after(1000, self.reconnect)
+        running = True
+        self.socket.close()
+        self.socket = socket.socket()
+        while running:
+            self.status_action.configure(text="[!] Try reconnect")
+            try:
+                host = "localhost"
+                port = 8080
+                self.socket.connect((host, port))
+                self.status.configure(text="Connected", text_color='green')
+                running = False
+                self.send_fc()
+            except Exception as e:
+                self.status.configure(text="NOT Connected", text_color='red')
+                time.sleep(1)
 
     def build_command(self):
         if len(self.all_emergency.keys()) <= 0:

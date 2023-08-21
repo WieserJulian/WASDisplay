@@ -8,9 +8,10 @@
 
 import customtkinter
 
-from MenuBar import MenuBar
-from WASCommunication import WASCommunication
-from WASTextFrame import WASTextFrame
+from src.tool_frames.MenuBar import MenuBar
+from src.utils.WASCommunication import WASCommunication
+from src.frames.WASTextFrame import WASTextFrame
+from src.tool_frames.SnackBarFrame import SnackBar
 
 DEBUG = True
 
@@ -22,15 +23,18 @@ class Display(customtkinter.CTk):
 
         # add widgets to app
         self.wasCommunication = WASCommunication(self, DEBUG)
-        self.wasFrame = WASTextFrame(self)
-        self.wasFrame.grid(row=0, column=0, padx=20, pady=20, sticky="nsew")
+        self.wasFrame = WASTextFrame(self, width=int(self.winfo_screenwidth() * (1 / 3)))
+        self.wasFrame.grid(row=0, column=0, padx=20, pady=(20, 0), sticky="nsew")
 
-        self.map_frame = customtkinter.CTkFrame(self, bg_color='transparent', width=int(self.winfo_screenwidth() / 2))
-        self.map_frame.grid(row=0, column=1, padx=20, pady=20, sticky="nsew")
-
+        self.map_frame = customtkinter.CTkFrame(self, bg_color='transparent',
+                                                width=int(self.winfo_screenwidth() * (2 / 2)))
+        self.map_frame.grid(row=0, column=1, padx=20, pady=(20, 0), sticky="nsew")
+        self.snackbar = SnackBar(self, height=40)
+        self.snackbar.grid(row=1, column=0, columnspan=2, padx=20, pady=5, sticky=customtkinter.NSEW)
         # Start Thread for WAS Communication
 
         self.bind("<<WASCommunication>>", self.changeWAS)
+        self.bind("<<StatusChanged>>", self.snackbar.change_status)
         self.configure(menu=MenuBar(self))
         self.communicate_WAS()
 
@@ -42,11 +46,15 @@ class Display(customtkinter.CTk):
         self.geometry("{0}x{1}+0+0".format(self.winfo_screenwidth(), self.winfo_screenheight()))
         self.grid_rowconfigure(0, weight=1)
         self.grid_columnconfigure(1, weight=1)
+        self.protocol("WM_DELETE_WINDOW", self.on_closing)
         if not DEBUG:
             self.overrideredirect(True)
         else:
             self.geometry("{0}x{1}+0+0".format(self.winfo_screenwidth(), self.winfo_screenheight() - 100))
 
+    def on_closing(self):
+        self.wasCommunication.socket.close()
+        self.destroy()
 
     def communicate_WAS(self):
         self.wasCommunication.readSocket()

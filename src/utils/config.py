@@ -6,7 +6,7 @@ from geopandas import GeoDataFrame
 
 
 class Config(object):
-    def __init__(self, path: str = 'config.yml'):
+    def __init__(self, path: str = 'utils/config.yml'):
         with open(path, 'r') as file:
             self.__all_settings = yaml.safe_load(file)
             self.server = self.__all_settings['server']

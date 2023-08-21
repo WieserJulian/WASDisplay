@@ -1,8 +1,9 @@
+import logging
 import re
 
 from customtkinter import CTkFrame, CTkLabel, CTkFont
 
-from Emergency import Emergency
+from src.utils.Emergency import Emergency
 
 
 class WASTextFrame(CTkFrame):
@@ -20,11 +21,11 @@ class WASTextFrame(CTkFrame):
             if emergency.status == 'Alarmiert' and emergency_id not in self.allEmergencyIDs:
                 self.addEmergency(emergency)
             elif len(self.allEmergencyIDs - active_operations.keys()) != 0:
-                self.deleteEmergency(self.allEmergencyIDs.keys() - active_operations.keys())
+                    self.deleteEmergency(list(self.allEmergencyIDs.keys() - active_operations.keys()))
             elif emergency.status == 'Ausgerückt':
                 self.changeState(emergency)
         if len(active_operations.keys()) == 0:
-            self.deleteEmergency(self.allEmergencyIDs.keys())
+                self.deleteEmergency(list(self.allEmergencyIDs.keys()))
 
     def addEmergency(self, emergency: Emergency):
         emergency_frame = CTkFrame(self)
