@@ -12,11 +12,10 @@ import threading
 import time
 import xml.etree.ElementTree as ET
 
-import osmnx.distance
 import osmnx as ox
+import osmnx.distance
 
 from Emergency import Emergency
-from TestData import get_testDataGenerator
 from config import Config
 
 
@@ -67,6 +66,7 @@ class WASCommunication:
             self.socket.bind((self.config.server['debug_host'], self.config.server['debug_port']))
             logging.debug(f"[*] Listening as {self.config.server['debug_host']}:{self.config.server['debug_port']}")
         self.socket.listen(5)
+
         threading.Thread(target=self.wait_for_accept).start()
 
     def wait_for_accept(self):
@@ -97,9 +97,9 @@ class WASCommunication:
                     logging.debug(operation.toString())
                 elif active_operation.status != operation.status:
                     logging.debug("operation %s changed status from %s to %s" %
-                          (operation.id,
-                           active_operation.status,
-                           operation.status))
+                                  (operation.id,
+                                   active_operation.status,
+                                   operation.status))
                 current_operations[operation.id] = operation
         for active_operation_id in self.active_operations.keys():
             if active_operation_id not in current_operations.keys():

@@ -5,8 +5,6 @@
 #  * This project can not be copied and/or distributed without the express
 #  * permission of Julian Wieser
 #  *******************************************************
-import tkinter
-from concurrent import futures
 
 import customtkinter
 
@@ -15,8 +13,6 @@ from WASCommunication import WASCommunication
 from WASTextFrame import WASTextFrame
 
 DEBUG = True
-
-thread_pool_executor = futures.ThreadPoolExecutor(max_workers=1)
 
 
 class Display(customtkinter.CTk):
@@ -29,13 +25,13 @@ class Display(customtkinter.CTk):
         self.wasFrame = WASTextFrame(self)
         self.wasFrame.grid(row=0, column=0, padx=20, pady=20, sticky="nsew")
 
-        self.map_frame = customtkinter.CTkFrame(self, bg_color='transparent', width=self.winfo_screenwidth()/2)
+        self.map_frame = customtkinter.CTkFrame(self, bg_color='transparent', width=int(self.winfo_screenwidth() / 2))
         self.map_frame.grid(row=0, column=1, padx=20, pady=20, sticky="nsew")
 
         # Start Thread for WAS Communication
 
         self.bind("<<WASCommunication>>", self.changeWAS)
-
+        self.bind("<<CLOSEAPP>>", self.close_application)
         self.configure(menu=MenuBar(self))
         self.communicate_WAS()
 
@@ -51,6 +47,9 @@ class Display(customtkinter.CTk):
             self.overrideredirect(True)
         else:
             self.geometry("{0}x{1}+0+0".format(self.winfo_screenwidth(), self.winfo_screenheight() - 100))
+
+    def close_application(self, x):
+        exit(0)
 
     def communicate_WAS(self):
         self.wasCommunication.readSocket()

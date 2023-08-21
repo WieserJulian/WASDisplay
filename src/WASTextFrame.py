@@ -1,12 +1,8 @@
-import logging
 import re
 
-from PIL import Image
-from customtkinter import CTkFrame, CTkLabel, CTkFont, CTkImage, CTkRadioButton
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+from customtkinter import CTkFrame, CTkLabel, CTkFont
 
 from Emergency import Emergency
-from NavigationFrame import NavigationFrame
 
 
 class WASTextFrame(CTkFrame):
@@ -16,7 +12,7 @@ class WASTextFrame(CTkFrame):
         # self.grid_columnconfigure(0, weight=1)
         self.offset_state = -1
         self.allEmergency = []
-        self.allEmergencyIDs = []
+        self.allEmergencyIDs = {}
 
     def changeWAS(self, active_operations: dict):
         for emergency_id in active_operations.keys():
@@ -24,11 +20,11 @@ class WASTextFrame(CTkFrame):
             if emergency.status == 'Alarmiert' and emergency_id not in self.allEmergencyIDs:
                 self.addEmergency(emergency)
             elif len(self.allEmergencyIDs - active_operations.keys()) != 0:
-                self.deleteEmergency(self.allEmergencyIDs - active_operations.keys())
+                self.deleteEmergency(self.allEmergencyIDs.keys() - active_operations.keys())
             elif emergency.status == 'Ausgerückt':
                 self.changeState(emergency)
         if len(active_operations.keys()) == 0:
-            self.deleteEmergency(self.allEmergencyIDs)
+            self.deleteEmergency(self.allEmergencyIDs.keys())
 
     def addEmergency(self, emergency: Emergency):
         emergency_frame = CTkFrame(self)
@@ -56,31 +52,26 @@ class WASTextFrame(CTkFrame):
         additionalInformation = CTkLabel(emergency_frame, font=font, text=emergency.operationName)
         additionalInformation.grid(row=5, column=0, padx=20, pady=10)
 
-
-        # traffic_light = CTkImage(light_image=Image.open(r"./assets/standing_red_flash.gif"),
-        #                          dark_image=Image.open(r"./assets/standing_red_flash.gif"), size=(100, 250))
-        # traffic_light_label = CTkLabel(emergency_frame, image=traffic_light, text="")
-        traffic_light_label = CTkFrame(emergency_frame, fg_color="red")
-        traffic_light_label.grid(row=0, rowspan=6, column=1, padx = (0, 10), pady=0, sticky="nes")
+        status_frame = CTkFrame(emergency_frame, fg_color="red")
+        status_frame.grid(row=0, rowspan=6, column=1, padx=(0, 10), pady=0, sticky="nes")
 
         emergency_frame.pack(anchor="center", pady=5, padx=1)
         self.allEmergency.append(emergency_frame)
-        self.allEmergencyIDs.append(emergency.id)
+        self.allEmergencyIDs[emergency.id] = status_frame
 
     def changeState(self, emergency: Emergency):
-        frame: CTkFrame = self.allEmergency[self.allEmergencyIDs.index(emergency.id)]
-        # traffic_light = CTkImage(light_image=Image.open(r"./assets/standing_yellow_flash.gif"),
-        #                          dark_image=Image.open(r"./assets/standing_yellow_flash.gif"), size=(100, 250))
-        frame.children[list(frame.children.keys())[self.offset_state]].configure(fg_color="green")
+        frame: CTkFrame = self.allEmergencyIDs.get(emergency.id)
+        frame.configure(fg_color="green")
 
     def deleteEmergency(self, to_remove: list):
         for rem in to_remove:
-            frame: CTkFrame = self.allEmergency[self.allEmergencyIDs.index(rem)]
+            frame: CTkFrame = self.allEmergency[list(self.allEmergencyIDs.keys()).index(rem)]
             frame.destroy()
             self.allEmergency.remove(frame)
-            self.allEmergencyIDs.remove(rem)
+            self.allEmergencyIDs.pop(rem)
 
-    def reformat_austrian_phone_number(self, phone_number):
+    @staticmethod
+    def reformat_austrian_phone_number(phone_number):
         if phone_number is None:
             return phone_number
         # Remove all non-digit characters from the phone number
