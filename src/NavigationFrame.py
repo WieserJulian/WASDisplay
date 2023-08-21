@@ -1,8 +1,5 @@
 import math
-import time
 
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-from matplotlib.figure import Figure
 import osmnx.distance
 from customtkinter import CTkFrame
 import osmnx as ox

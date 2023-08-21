@@ -10,9 +10,6 @@ class MenuBar(tk.Menu):
         self.master = master
         # Adding File Menu and commands
         self.add_command(label='Einstellungen', command=self.open_settings)
-        self.add_command(label='WASDisplay Beenden', command=self.close_application)
-
-
         self.settings_window = None
 
     def close_application(self):
@@ -24,4 +21,3 @@ class MenuBar(tk.Menu):
             self.settings_window = Settings(self)  # create window if its None or destroyed
         else:
             self.settings_window.focus()  # if window exists focus it
-        pass

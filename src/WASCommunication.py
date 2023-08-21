@@ -69,12 +69,8 @@ class WASCommunication:
             self.socket.bind((self.config.server['debug_host'], self.config.server['debug_port']))
             logging.debug(f"[*] Listening as {self.config.server['debug_host']}:{self.config.server['debug_port']}")
         self.socket.listen(5)
-        self.thread = multiprocessing.Process(target=self.wait_for_accept)
+        self.thread = threading.Thread(target=self.wait_for_accept, daemon=True)
         self.thread.start()
-        # threading.Thread(target=self.wait_for_accept)
-    def stop_reconnect(self):
-        if self.thread is not None:
-            self.thread.close()
     def wait_for_accept(self):
         self.client, address = self.socket.accept()
         logging.debug(f"[+] {address} is connected.")

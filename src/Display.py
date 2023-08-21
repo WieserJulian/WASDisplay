@@ -31,7 +31,6 @@ class Display(customtkinter.CTk):
         # Start Thread for WAS Communication
 
         self.bind("<<WASCommunication>>", self.changeWAS)
-        self.bind("<<CLOSEAPP>>", self.close_application)
         self.configure(menu=MenuBar(self))
         self.communicate_WAS()
 
@@ -48,9 +47,6 @@ class Display(customtkinter.CTk):
         else:
             self.geometry("{0}x{1}+0+0".format(self.winfo_screenwidth(), self.winfo_screenheight() - 100))
 
-    def close_application(self, x):
-        self.destroy()
-        self.wasCommunication.stop_reconnect()
 
     def communicate_WAS(self):
         self.wasCommunication.readSocket()
