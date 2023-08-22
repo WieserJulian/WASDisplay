@@ -4,6 +4,7 @@ import re
 from customtkinter import CTkFrame, CTkLabel, CTkFont
 
 from src.utils.Emergency import Emergency
+from src.utils.util_functions import reformat_austrian_phone_number
 
 
 class WASTextFrame(CTkFrame):
@@ -46,7 +47,7 @@ class WASTextFrame(CTkFrame):
         nameAndLevel.grid(row=3, column=0, padx=20, pady=10)
 
         if emergency.caller is not None:
-            cal = self.reformat_austrian_phone_number(emergency.caller)
+            cal = reformat_austrian_phone_number(emergency.caller)
             caller = CTkLabel(emergency_frame, font=font, text="Anrufer: {}".format(cal))
             caller.grid(row=4, column=0, padx=20, pady=10)
 
@@ -71,18 +72,4 @@ class WASTextFrame(CTkFrame):
             self.allEmergency.remove(frame)
             self.allEmergencyIDs.pop(rem)
 
-    @staticmethod
-    def reformat_austrian_phone_number(phone_number):
-        if phone_number is None:
-            return phone_number
-        # Remove all non-digit characters from the phone number
-        digits_only = re.sub(r'\D', '', phone_number)
 
-        # Check if the phone number is valid and has enough digits
-        if not re.match(r'[0-9]*\/*(\+49)*(\+43)*(\+41)*[ ]*(\([0-9]{3,6}\))*([ ]*[0-9]|\/|\(|\)|\-|)*', digits_only):
-            return phone_number
-
-            # Reformat the phone number to the desired format
-        formatted_number = f"+43 (0)6{digits_only[2:4]} {digits_only[4:7]} {digits_only[7:]}"
-
-        return formatted_number

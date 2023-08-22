@@ -1,5 +1,5 @@
 default:
-  appearance: light
+  appearance: "light"
   debug: true
   depo_way:
   - 1002720549
