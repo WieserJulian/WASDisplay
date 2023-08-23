@@ -8,10 +8,10 @@
 
 import customtkinter
 
-from src.tool_frames.MenuBar import MenuBar
-from src.utils.WASCommunication import WASCommunication
-from src.frames.WASTextFrame import WASTextFrame
-from src.tool_frames.SnackBarFrame import SnackBar
+from tool_frames.MenuBar import MenuBar
+from utils.WASCommunication import WASCommunication
+from frames.WASTextFrame import WASTextFrame
+from tool_frames.SnackBarFrame import SnackBar
 
 DEBUG = True
 

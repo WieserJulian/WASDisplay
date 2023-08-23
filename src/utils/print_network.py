@@ -1,9 +1,9 @@
 import platform
 
-from src.utils.Emergency import Emergency
-from src.utils.config import Config
+from utils.Emergency import Emergency
+from utils.config import Config
 
-from src.utils.util_functions import reformat_austrian_phone_number
+from utils.util_functions import reformat_austrian_phone_number
 
 
 def print_emergency(emergency: Emergency):

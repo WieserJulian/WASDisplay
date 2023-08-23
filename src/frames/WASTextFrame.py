@@ -3,8 +3,8 @@ import re
 
 from customtkinter import CTkFrame, CTkLabel, CTkFont
 
-from src.utils.Emergency import Emergency
-from src.utils.util_functions import reformat_austrian_phone_number
+from utils.Emergency import Emergency
+from utils.util_functions import reformat_austrian_phone_number
 
 
 class WASTextFrame(CTkFrame):

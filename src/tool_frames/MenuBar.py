@@ -1,7 +1,7 @@
 import customtkinter as ctk
 import tkinter as tk
 
-from src.tool_frames.SettingsFrame import Settings
+from tool_frames.SettingsFrame import Settings
 
 
 class MenuBar(tk.Menu):

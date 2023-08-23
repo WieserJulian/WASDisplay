@@ -16,8 +16,8 @@ import xml.etree.ElementTree as ET
 import osmnx as ox
 import osmnx.distance
 
-from src.utils.config import Config
-from src.utils.Emergency import Emergency
+from utils.config import Config
+from utils.Emergency import Emergency
 
 
 class WASCommunication:

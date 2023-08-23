@@ -1,14 +1,19 @@
 import socket
+import sys
 import threading
 import time
 import uuid
-
+if getattr(sys, 'frozen', False):
+    import pyi_splash
 import customtkinter
 
 
 class App(customtkinter.CTk):
     def __init__(self):
         super().__init__()
+        if getattr(sys, 'frozen', False):
+            pyi_splash.close()
+        self.focus()
         self.geometry("1000x500")
         self.title("Test Sender")
         self.command = "<pdu></pdu>"
