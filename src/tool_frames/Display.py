@@ -41,6 +41,7 @@ class Display(customtkinter.CTk):
     def __load_config(self):
         global DEBUG
         self.title("WAS Erweiterungs Oberfläche")
+        self.iconbitmap("assets/Feuerwehr.ico")
         customtkinter.set_appearance_mode("light")
         customtkinter.set_widget_scaling(1)
         self.geometry("{0}x{1}+0+0".format(self.winfo_screenwidth(), self.winfo_screenheight()))

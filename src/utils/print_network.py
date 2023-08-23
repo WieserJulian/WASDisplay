@@ -18,7 +18,6 @@ def print_emergency(emergency: Emergency):
 
 def windows_print(emergency: Emergency):
     linux_make_pdf(emergency)
-    config = Config()
     from win32printing import Printer
 
     text = {

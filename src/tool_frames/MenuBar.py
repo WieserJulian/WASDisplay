@@ -15,9 +15,13 @@ class MenuBar(tk.Menu):
     def close_application(self):
         self.master.event_generate("<<CLOSEAPP>>")
 
-
     def open_settings(self):
         if self.settings_window is None or not self.settings_window.winfo_exists():
-            self.settings_window = Settings(self)  # create window if its None or destroyed
+            self.settings_window = Settings(self.master)
+            self.settings_window.bind("<FocusOut>", self.refocus_settings)
         else:
-            self.settings_window.focus()  # if window exists focus it
+            self.settings_window.focus_force()
+
+    def refocus_settings(self, _event):
+        # self.master.bell()
+        self.settings_window.focus_force()
