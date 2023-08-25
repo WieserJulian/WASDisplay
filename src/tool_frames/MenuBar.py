@@ -1,15 +1,14 @@
-import customtkinter as ctk
-import tkinter as tk
-
+import customtkinter
 from tool_frames.SettingsFrame import Settings
 
 
-class MenuBar(tk.Menu):
+class MenuBar(customtkinter.CTkFrame):
     def __init__(self, master):
-        super().__init__(master)
+        super().__init__(master, height=20)
         self.master = master
         # Adding File Menu and commands
-        self.add_command(label='Einstellungen', command=self.open_settings)
+        self.open_settings = customtkinter.CTkButton(self, text='Einstellungen', command=self.open_settings, fg_color="gray45")
+        self.open_settings.grid(row=0, column=0, padx=5, sticky=customtkinter.W)
         self.settings_window = None
 
     def close_application(self):
@@ -18,10 +17,7 @@ class MenuBar(tk.Menu):
     def open_settings(self):
         if self.settings_window is None or not self.settings_window.winfo_exists():
             self.settings_window = Settings(self.master)
-            self.settings_window.bind("<FocusOut>", self.refocus_settings)
+            self.after(500,self.settings_window.focus_force())
         else:
             self.settings_window.focus_force()
 
-    def refocus_settings(self, _event):
-        # self.master.bell()
-        self.settings_window.focus_force()

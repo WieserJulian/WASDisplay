@@ -1,12 +1,18 @@
 default:
-  appearance: "light"
+  appearance: light
   debug: true
   depo_way:
   - 1002720549
   init_addr: Bach 49, Rutzenham, Austria
   place_depo: Bach 49, Rutzenham, Austria
 server:
-  host: 192.168.130.100
   debug_host: 127.0.0.1
-  port: 47000
   debug_port: 8080
+  host: 192.168.130.100
+  port: 47000
+settings:
+  map:
+    active: false
+  printer:
+    active: true
+    amount: 2

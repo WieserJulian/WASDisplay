@@ -119,10 +119,11 @@ class App(customtkinter.CTk):
                                         <key>0x016d48b8</key>
                                         <origin tid="0000000">LFKOO</origin>
                                         <receive-tad>2019-11-06 17:58:49</receive-tad>
-                                        <operation-id>{em_id}</operation-id><level>1</level>
-                                        <name>TEST</name>
+                                        <operation-id>{em_id}</operation-id>
+                                        <level>1</level>
+                                        <name>Max Mustermann</name>
                                         <operation-name>{em[0]}</operation-name>
-                                        <caller></caller>
+                                        <caller>06641234567</caller>
                                         <location>{em[1]}</location>
                                         <info>TEST</info>
                                         <program>Stiller Alarm oHT</program>

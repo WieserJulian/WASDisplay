@@ -1,16 +1,18 @@
 import yaml
 import osmnx as ox
 import pickle
+from munch import DefaultMunch
 
-from geopandas import GeoDataFrame
 
 
 class Config(object):
     def __init__(self, path: str = 'utils/config.yml'):
         with open(path, 'r') as file:
-            self.__all_settings = yaml.safe_load(file)
-            self.server = self.__all_settings['server']
-            self.default = self.__all_settings['default']
+            self.settings = DefaultMunch.fromDict(yaml.safe_load(file))
+
+    def write(self, path: str = 'utils/config.yml'):
+        with open(path, 'w') as file:
+            yaml.dump(self.settings.toDict(), file)
     def load_graphs(self):
         self.g_overview = ox.graph_from_address(self.default['place_depo'], dist=15_000, network_type="all_private",
                                                 simplify=False,

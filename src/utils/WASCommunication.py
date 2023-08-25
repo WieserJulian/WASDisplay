@@ -7,7 +7,6 @@
 #   *******************************************************
 import logging
 import math
-import multiprocessing
 import socket
 import threading
 import time
@@ -19,18 +18,23 @@ import osmnx.distance
 from utils.config import Config
 from utils.Emergency import Emergency
 
+from src.utils.print_network import print_emergency
+
 
 class WASCommunication:
-    def __init__(self, root, DEBUG):
+    def __init__(self, root):
+        self.config = Config()
         self.client = None
         self.thread = None
         self.root = root
         self.count_order_list = 0
         self.active_operations = {}
-        self.DEBUG = DEBUG
-        self.config = Config()
+        self.DEBUG = self.config.settings.default.debug
         self.socket = socket.socket()
-        self.reconnect()
+        try:
+            self.reconnect()
+        except Exception as e:
+            logging.error("[!] some errror:", e)
 
     def readSocket(self):
         """ Single Read """
@@ -45,7 +49,7 @@ class WASCommunication:
             data = self.client.recv(8192)
         except ConnectionError:
             logging.error("[!] Couldnt connect retry")
-            self.reconnetct_and_clear()
+            self.reconnect_and_clear()
             return
         except IOError as e:
             logging.error("[!] some errror:", e)
@@ -60,7 +64,7 @@ class WASCommunication:
         else:
             logging.debug("data empty --> ending recvloop")
 
-    def reconnetct_and_clear(self):
+    def reconnect_and_clear(self):
         if self.socket is not None:
             self.socket.close()
             self.thread = None
@@ -70,11 +74,12 @@ class WASCommunication:
     def reconnect(self):
         self.root.event_generate("<<StatusChanged>>", x=0)
         if not self.DEBUG:
-            self.socket.bind((self.config.server['host'], self.config.server['port']))
-            logging.debug(f"[*] Listening as {self.config.server['host']}:{self.config.server['port']}")
+            self.socket.bind((self.config.settings.server.host, self.config.settings.server.port))
+            logging.debug(f"[*] Listening as {self.config.settings.server.host}:{self.config.settings.server.port}")
         else:
-            self.socket.bind((self.config.server['debug_host'], self.config.server['debug_port']))
-            logging.debug(f"[*] Listening as {self.config.server['debug_host']}:{self.config.server['debug_port']}")
+            self.socket.bind((self.config.settings.server.debug_host, self.config.settings.server.debug_port))
+            logging.debug(
+                f"[*] Listening as {self.config.settings.server.debug_host}:{self.config.settings.server.debug_port}")
         self.socket.listen(5)
         self.thread = threading.Thread(target=self.wait_for_accept, daemon=True)
         self.thread.start()
@@ -107,7 +112,10 @@ class WASCommunication:
                 if active_operation is None:
                     logging.debug("new operation %s" % operation.id)
                     s = time.time()
-                    # operation.navigation_Figure = self.generate_image(operation)
+                    operation.navigation_Figure = self.generate_image(operation)
+
+                    self.thread_print = threading.Thread(target=print_emergency, args=(operation,), daemon=True)
+                    self.thread_print.start()
                     logging.debug(operation.toString())
                 elif active_operation.status != operation.status:
                     logging.debug("operation %s changed status from %s to %s" %
@@ -126,11 +134,13 @@ class WASCommunication:
         self.root.event_generate("<<WASCommunication>>")
 
     def generate_image(self, emergency: Emergency):
+        if not self.config.settings.settings.map.active:
+            return None
         tags = {"building": True}
         gdf_depo = self.config.gdf_depo
-        gdf_emergency = ox.features_from_place(emergency.location + " AUSTRIA", tags)
-        dist = int(self.distance((gdf_depo.centroid.x.values, gdf_depo.centroid.y.values),
-                                 (gdf_emergency.centroid.x.values, gdf_emergency.centroid.y.values)) * 1000) + 500
+        gdf_emergency = ox.features_from_place(emergency.location_frame + " AUSTRIA", tags)
+        dist = int(self.__distance((gdf_depo.centroid.x.values, gdf_depo.centroid.y.values),
+                                   (gdf_emergency.centroid.x.values, gdf_emergency.centroid.y.values)) * 1000) + 500
         middle_point = (((gdf_depo.centroid.x.values + gdf_emergency.centroid.x.values) / 2)[0],
                         ((gdf_depo.centroid.y.values + gdf_emergency.centroid.y.values) / 2)[0])
 
@@ -152,10 +162,9 @@ class WASCommunication:
         return fig
 
     def generate_bevorehand(self, g_overview, gdf_depo, gdf_emergency, tags):
-
         return
 
-    def distance(self, origin, destination):
+    def __distance(self, origin, destination):
         lat1, lon1 = origin
         lat2, lon2 = destination
         radius = osmnx.distance.EARTH_RADIUS_M / 1000  # km

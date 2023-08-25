@@ -13,7 +13,7 @@ from utils.WASCommunication import WASCommunication
 from frames.WASTextFrame import WASTextFrame
 from tool_frames.SnackBarFrame import SnackBar
 
-DEBUG = True
+from utils.config import Config
 
 
 class Display(customtkinter.CTk):
@@ -22,37 +22,41 @@ class Display(customtkinter.CTk):
         self.__load_config()
 
         # add widgets to app
-        self.wasCommunication = WASCommunication(self, DEBUG)
-        self.wasFrame = WASTextFrame(self, width=int(self.winfo_screenwidth() * (1 / 3)))
-        self.wasFrame.grid(row=0, column=0, padx=20, pady=(20, 0), sticky="nsew")
+        self.wasCommunication = WASCommunication(self)
+        self.wasFrame = WASTextFrame(self, width=self.winfo_screenwidth())
+        self.wasFrame.grid(row=1, column=0, padx=20, pady=(5, 0), sticky=customtkinter.NSEW)
+        if Config().settings.settings.map.active:
+            self.wasFrame.configure(width=int(self.winfo_screenwidth() * (1 / 3)))
+            self.grid_columnconfigure(1, weight=1)
+            self.map_frame = customtkinter.CTkFrame(self, bg_color='transparent',
+                                                    width=int(self.winfo_screenwidth() * (2 / 2)))
+            self.map_frame.grid(row=1, column=1, padx=20, pady=(5, 0), sticky="nsew")
 
-        self.map_frame = customtkinter.CTkFrame(self, bg_color='transparent',
-                                                width=int(self.winfo_screenwidth() * (2 / 2)))
-        self.map_frame.grid(row=0, column=1, padx=20, pady=(20, 0), sticky="nsew")
         self.snackbar = SnackBar(self, height=40)
-        self.snackbar.grid(row=1, column=0, columnspan=2, padx=20, pady=5, sticky=customtkinter.NSEW)
+        self.snackbar.grid(row=2, column=0, columnspan=2, padx=20, pady=5, sticky=customtkinter.EW)
         # Start Thread for WAS Communication
 
         self.bind("<<WASCommunication>>", self.changeWAS)
         self.bind("<<StatusChanged>>", self.snackbar.change_status)
-        self.configure(menu=MenuBar(self))
         self.communicate_WAS()
 
     def __load_config(self):
-        global DEBUG
         self.title("WAS Erweiterungs Oberfläche")
         self.iconbitmap("assets/Feuerwehr.ico")
         customtkinter.set_appearance_mode("light")
         customtkinter.set_widget_scaling(1)
+        customtkinter.set_default_color_theme("assets/theme.json")
         self.geometry("{0}x{1}+0+0".format(self.winfo_screenwidth(), self.winfo_screenheight()))
-        self.grid_rowconfigure(0, weight=1)
-        self.grid_columnconfigure(1, weight=1)
+        self.grid_rowconfigure(1, weight=1)
+        self.grid_columnconfigure(0, weight=1)
         self.protocol("WM_DELETE_WINDOW", self.on_closing)
-        if not DEBUG:
+        if not Config().settings.default.debug:
             self.overrideredirect(True)
         else:
             self.geometry("{0}x{1}+0+0".format(self.winfo_screenwidth(), self.winfo_screenheight() - 100))
 
+        self.menu_bar = MenuBar(self)
+        self.menu_bar.grid(row=0, column=0, columnspan=2, sticky=customtkinter.NSEW)
     def on_closing(self):
         self.wasCommunication.socket.close()
         self.destroy()

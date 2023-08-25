@@ -9,15 +9,16 @@ from utils.util_functions import reformat_austrian_phone_number
 def print_emergency(emergency: Emergency):
     match platform.system():
         case 'Windows':
-            windows_print(emergency)
+            for _ in range(Config().settings.settings.printer.amount):
+                windows_print(emergency)
         case 'Linux':
-            linux_print(emergency)
+            for _ in range(Config().settings.settings.printer.amount):
+                linux_print(emergency)
         case _:
             raise Exception("Wrong OS")
 
 
 def windows_print(emergency: Emergency):
-    linux_make_pdf(emergency)
     from win32printing import Printer
 
     text = {
@@ -31,12 +32,14 @@ def windows_print(emergency: Emergency):
                  auto_page=True) as printer:
         printer.auto_page = True
         printer.text("Einsatz Informationen", font_config=h1, align="center")
-        printer.text("Von {}".format(emergency.origin), font_config=text)
-        printer.text("{} Alst. {}".format(emergency.name, emergency.level), font_config=text)
+        printer.text("{} Alst. {}".format(emergency.operationName, emergency.level), font_config=text)
+        printer.text("Ort: {}".format(emergency.location), font_config=text)
+        printer.text("Anrufer: {}".format(emergency.name), font_config=text)
         if emergency.caller is not None:
             cal = reformat_austrian_phone_number(emergency.caller)
-            printer.text("Anrufer: {}".format(cal), font_config=text)
-        printer.text(emergency.operationName, font_config=text)
+            printer.text("Telefonnummer: {}".format(cal), font_config=text)
+        printer.text("Von {}".format(emergency.origin), font_config=text)
+        printer.text("ID: {} {}".format(emergency.id, emergency.receiveTad), font_config=text)
 
 
 def linux_make_pdf(emergency: Emergency):
@@ -50,12 +53,13 @@ def linux_make_pdf(emergency: Emergency):
     pdf.cell(200, 10, txt="Einsatz Informationen", ln=1, align='L')
     pdf.set_font("Arial", size=20)
 
-    pdf.cell(200, 10, txt="Von {}".format(emergency.origin), ln=2, align='L')
-    pdf.cell(200, 10, txt="{} Alst. {}".format(emergency.name, emergency.level), ln=3, align='L')
+    pdf.cell(200, 10, txt="{} Alst. {}".format(emergency.name, emergency.level), ln=2, align='L')
+    pdf.cell(200, 10, txt="Anrufer: {}".format(emergency.name), ln=3, align='L')
     if emergency.caller is not None:
         cal = reformat_austrian_phone_number(emergency.caller)
-        pdf.cell(200, 10, txt="Anrufer: {}".format(cal), ln=4, align='L')
-    pdf.cell(200, 10, txt=emergency.operationName, ln=5, align='L')
+        pdf.cell(200, 10, txt="Telefonnummer: {}".format(cal), ln=4, align='L')
+    pdf.cell(200, 10, txt="Von {}".format(emergency.origin), ln=5, align='L')
+    pdf.cell(200, 10, txt="ID: {} {}".format(emergency.id, emergency.receiveTad), ln=6, align='L')
 
     pdf.output("{}.pdf".format(emergency.id))
 

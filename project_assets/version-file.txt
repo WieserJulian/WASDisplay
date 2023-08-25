@@ -1,0 +1,7 @@
+Version: 2023.0.0
+CompanyName: I-Wieser.com
+FileDescription: Was Display Extension
+InternalName: WAS Display
+LegalCopyright: I-Wieser.com. All rights reserved.
+OriginalFilename: WASDisplay.exe
+ProductName: WAS Display
