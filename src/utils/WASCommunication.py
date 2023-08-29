@@ -113,9 +113,9 @@ class WASCommunication:
                     logging.debug("new operation %s" % operation.id)
                     s = time.time()
                     operation.navigation_Figure = self.generate_image(operation)
-
-                    self.thread_print = threading.Thread(target=print_emergency, args=(operation,), daemon=True)
-                    self.thread_print.start()
+                    if self.config.settings.settings.printer.active:
+                        self.thread_print = threading.Thread(target=print_emergency, args=(operation,), daemon=True)
+                        self.thread_print.start()
                     logging.debug(operation.toString())
                 elif active_operation.status != operation.status:
                     logging.debug("operation %s changed status from %s to %s" %

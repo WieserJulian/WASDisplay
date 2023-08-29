@@ -1,8 +1,11 @@
+import os.path
 import tkinter
 
 import customtkinter
 from PIL import Image
 from customtkinter import ThemeManager, AppearanceModeTracker
+
+from utils.config import Config
 
 
 class SnackBar(customtkinter.CTkFrame):
@@ -11,11 +14,13 @@ class SnackBar(customtkinter.CTkFrame):
         self.master = master
         self.grid_columnconfigure(1, weight=1)
         self.height = kwargs['height'] - 10
-        self.red_img = customtkinter.CTkImage(light_image=Image.open("assets/red_point.png"),
-                                              dark_image=Image.open("assets/red_point.png"),
+        self.green_img_path = os.path.join(Config().base_path, "assets/green_point.png")
+        self.red_img_path = os.path.join(Config().base_path, "assets/red_point.png")
+        self.red_img = customtkinter.CTkImage(light_image=Image.open(self.red_img_path),
+                                              dark_image=Image.open(self.red_img_path),
                                               size=(self.height, self.height))
-        self.green_img = customtkinter.CTkImage(light_image=Image.open("assets/green_point.png"),
-                                              dark_image=Image.open("assets/green_point.png"),
+        self.green_img = customtkinter.CTkImage(light_image=Image.open(self.green_img_path),
+                                              dark_image=Image.open(self.green_img_path),
                                               size=(self.height, self.height))
 
         self.circle_img = customtkinter.CTkLabel(self, height=self.height, width=self.height, image=self.red_img, text="")

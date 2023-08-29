@@ -1,7 +1,29 @@
-Version: 2023.0.0
-CompanyName: I-Wieser.com
-FileDescription: Was Display Extension
-InternalName: WAS Display
-LegalCopyright: I-Wieser.com. All rights reserved.
-OriginalFilename: WASDisplay.exe
-ProductName: WAS Display
+VSVersionInfo(
+  ffi=FixedFileInfo(
+    filevers=(2023, 0, 0, 0),
+    prodvers=(2023, 0, 0, 0),
+    mask=0x3f,
+    flags=0x0,
+    OS=0x40004,
+    fileType=0x1,
+    subtype=0x0,
+    date=(0, 0)
+    ),
+  kids=[
+    StringFileInfo(
+      [
+      StringTable(
+        u'040904B0',
+        [StringStruct(u'CompanyName', u'I-Wieser.com'),
+        StringStruct(u'FileDescription', u' Was Display'),
+        StringStruct(u'FileVersion', u'2023.0.0.0'),
+        StringStruct(u'InternalName', u'WAS Display'),
+        StringStruct(u'LegalCopyright', u'\xa9 I-Wieser.com. All rights reserved.'),
+        StringStruct(u'OriginalFilename', u'WASDisplay.exe'),
+        StringStruct(u'ProductName', u'WASDisplay.exe'),
+        StringStruct(u'Language', u'German (Austria)'),
+        StringStruct(u'ProductVersion', u'2023.0.0.0')])
+      ]),
+    VarFileInfo([VarStruct(u'Translation', [1033, 1200])])
+  ]
+)

@@ -1,5 +1,7 @@
+import logging
 import platform
 
+import win32ui
 from utils.Emergency import Emergency
 from utils.config import Config
 
@@ -10,10 +12,16 @@ def print_emergency(emergency: Emergency):
     match platform.system():
         case 'Windows':
             for _ in range(Config().settings.settings.printer.amount):
-                windows_print(emergency)
+                try:
+                    windows_print(emergency)
+                except win32ui.error as e:
+                    logging.error("Printing failed", e)
         case 'Linux':
             for _ in range(Config().settings.settings.printer.amount):
-                linux_print(emergency)
+                try:
+                    linux_print(emergency)
+                except Exception as e:
+                    logging.error("Printing failed", e)
         case _:
             raise Exception("Wrong OS")
 

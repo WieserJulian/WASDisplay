@@ -1,18 +1,29 @@
 import yaml
 import osmnx as ox
 import pickle
+import os
+import logging
+import sys
 from munch import DefaultMunch
 
 
-
 class Config(object):
-    def __init__(self, path: str = 'utils/config.yml'):
-        with open(path, 'r') as file:
+
+    def __init__(self):
+        try:
+            self.base_path = sys._MEIPASS
+        except Exception as es:
+            logging.debug(es)
+            self.base_path = os.getcwd()
+        self.config_path = os.path.join(self.base_path, 'config.yml')
+        self.icon_path = os.path.join(self.base_path, 'assets/Feuerwehr.ico')
+        with open(self.config_path, 'r') as file:
             self.settings = DefaultMunch.fromDict(yaml.safe_load(file))
 
-    def write(self, path: str = 'utils/config.yml'):
-        with open(path, 'w') as file:
+    def write(self, ):
+        with open(self.config_path, 'w') as file:
             yaml.dump(self.settings.toDict(), file)
+
     def load_graphs(self):
         self.g_overview = ox.graph_from_address(self.default['place_depo'], dist=15_000, network_type="all_private",
                                                 simplify=False,
@@ -35,7 +46,7 @@ class Config(object):
         self.generated_plot = ox.plot_footprints(gdf, ax=ax, alpha=0.5, show=False, color="b")
         pickle.dump(self.generated_plot[0], open('save/fig.pickle', 'wb'))
         pickle.dump(self.generated_plot[1], open('save/ax.pickle', 'wb'))
-        with open('config.yml', 'w') as file:
+        with open('../config.yml', 'w') as file:
             self.__all_settings['default']['init_addr'] = self.default['place_depo']
             self.__all_settings['default']['depo_way'] = self.depo_way
             _ = yaml.dump(self.__all_settings, file)

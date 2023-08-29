@@ -10,13 +10,13 @@ Für Testen einfach Microsoft PDf Printer auswählen als Standard
 
 ## Basis Funktionen
 1) Anzeigen von Einsatzname, Alarmstufe, Ort, Anrufer name, Anrufertelefonnummer, Alamierendestelle
-![[DemoBasics.png]]
+![DemoBasics.png](project_assets%2FDemoBasics.png)
 2) Automatischen Ausdrucken einer PDF in der gewünschten Anzahl
-![[Printer.png]]
-
+![Printer.png](project_assets%2FPrinter.png)
+3) 
 # Einstellungen
-![[AlgEinstellungen.png]]
-![[ModukeEinstellungen.png]]
+![AlgEinstellungen.png](project_assets%2FAlgEinstellungen.png)
+![ModukeEinstellungen.png](project_assets%2FModukeEinstellungen.png)
 ## Erweiterungen (TODOS)
 1) Ein einbau von einer Karte die Automatisch (15km bzw wie eingestellt) aufgebaut wird und danach bei einem Alarm den Ort mittels symbol makiert:
 

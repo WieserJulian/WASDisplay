@@ -2,6 +2,7 @@ import socket
 import sys
 import threading
 import time
+import tkinter
 import uuid
 if getattr(sys, 'frozen', False):
     import pyi_splash

@@ -1,4 +1,6 @@
 import enum
+import sys
+import os
 import tkinter.messagebox
 
 import customtkinter
@@ -12,13 +14,14 @@ class MODULES(enum.Enum):
     APPEARANCE = 2
     LOCATION = 3,
     DEBUG = 4
+    REQUEST_TIME = 5
 
 
 class Settings(customtkinter.CTkToplevel):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.title("Einstellungen")
-        self.after(200, lambda: self.iconbitmap("assets/Feuerwehr.ico"))
+        self.after(200, lambda: self.iconbitmap(self.config.icon_path))
         self.geometry("800x500")
         self.resizable(width=False, height=False)
         self.grid_rowconfigure(0, weight=1)
@@ -50,6 +53,12 @@ class Settings(customtkinter.CTkToplevel):
                                                   customtkinter.CTkSwitch, MODULES.DEBUG,
                                                   self.config.settings.default.debug, text="")
         self.debug_mode.grid(row=2, column=0, padx=5, pady=5, sticky=customtkinter.NSEW)
+
+        # self.request_time_frame = self.add_settings_frame(self.tab_frame.tab("Allgemein"), "Abfrage Zeit (sekunden) ",
+        #                                               customtkinter.CTkEntry, MODULES.REQUEST_TIME,
+        #                                               text=self.config.settings.default.request_time,
+        #                                               validate='key', validatecommand=self.int_validator)
+        # self.request_time_frame.grid(row=3, column=0, padx=5, pady=5, sticky=customtkinter.NSEW)
         # Functions Tab
         self.tab_frame.add("Funktionen")
         # self.tab_frame.set("Funktionen")
@@ -60,7 +69,7 @@ class Settings(customtkinter.CTkToplevel):
         self.printer_frame.grid_columnconfigure(0, weight=1)
         self.printer_enable_frame = self.add_settings_frame(self.printer_frame, "Drucker Module",
                                                             customtkinter.CTkSwitch, MODULES.PRINTER,
-                                                            self.config.settings.default.appearance == 'light', text="")
+                                                            self.config.settings.settings.printer.active, text="")
         self.printer_enable_frame.grid(row=0, column=0, padx=5, pady=5, sticky=customtkinter.NSEW)
 
         self.printer_piece_frame = self.add_settings_frame(self.printer_frame, "Anzahl der Ausdrucke: ",
@@ -80,6 +89,8 @@ class Settings(customtkinter.CTkToplevel):
             self.get_entry(self.printer_piece_frame, self.config.settings.settings.printer.amount))
         self.config.settings.default.place_depo = self.get_entry(self.location_frame,
                                                                  self.config.settings.default.place_depo)
+        # self.config.settings.default.request_time = int(self.get_entry(self.request_time_frame,
+        #                                                            self.config.settings.default.request_time))
         if self.debug_var != self.config.settings.default.debug:
             res = tkinter.messagebox.askokcancel("Restart", "Es wird ein Neustart benötigt!")
             if res:

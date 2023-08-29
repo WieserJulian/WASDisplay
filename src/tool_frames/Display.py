@@ -7,12 +7,13 @@
 #  *******************************************************
 
 import customtkinter
+import sys
 
 from tool_frames.MenuBar import MenuBar
 from utils.WASCommunication import WASCommunication
 from frames.WASTextFrame import WASTextFrame
 from tool_frames.SnackBarFrame import SnackBar
-
+import os
 from utils.config import Config
 
 
@@ -42,10 +43,10 @@ class Display(customtkinter.CTk):
 
     def __load_config(self):
         self.title("WAS Erweiterungs Oberfläche")
-        self.iconbitmap("assets/Feuerwehr.ico")
+        self.iconbitmap(Config().icon_path)
         customtkinter.set_appearance_mode("light")
         customtkinter.set_widget_scaling(1)
-        customtkinter.set_default_color_theme("assets/theme.json")
+        customtkinter.set_default_color_theme(os.path.join(Config().base_path, "assets/theme.json"))
         self.geometry("{0}x{1}+0+0".format(self.winfo_screenwidth(), self.winfo_screenheight()))
         self.grid_rowconfigure(1, weight=1)
         self.grid_columnconfigure(0, weight=1)
@@ -57,13 +58,17 @@ class Display(customtkinter.CTk):
 
         self.menu_bar = MenuBar(self)
         self.menu_bar.grid(row=0, column=0, columnspan=2, sticky=customtkinter.NSEW)
+
     def on_closing(self):
         self.wasCommunication.socket.close()
         self.destroy()
 
     def communicate_WAS(self):
         self.wasCommunication.readSocket()
-        self.after(2000, self.communicate_WAS)
+        if Config().settings.default.debug:
+            self.after(2000, self.communicate_WAS)
+        else:
+            self.after(Config().settings.default.request_time * 1000, self.communicate_WAS)
 
     def changeWAS(self, event):
         self.wasFrame.changeWAS(self.wasCommunication.active_operations)

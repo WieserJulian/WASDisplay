@@ -5,6 +5,7 @@ default:
   - 1002720549
   init_addr: Bach 49, Rutzenham, Austria
   place_depo: Bach 49, Rutzenham, Austria
+  request_time: 2
 server:
   debug_host: 127.0.0.1
   debug_port: 8080
