@@ -10,19 +10,19 @@ from munch import DefaultMunch
 class Config(object):
 
     def __init__(self):
-        try:
-            self.base_path = sys._MEIPASS
-        except Exception as es:
-            logging.debug(es)
-            self.base_path = os.getcwd()
+        self.base_path = os.getcwd()
+        # try:
+        #     self.base_path = sys._MEIPASS
+        # except Exception as es:
+        #     logging.debug(es)
         self.config_path = os.path.join(self.base_path, 'config.yml')
         self.icon_path = os.path.join(self.base_path, 'assets/Feuerwehr.ico')
         with open(self.config_path, 'r') as file:
             self.settings = DefaultMunch.fromDict(yaml.safe_load(file))
 
-    def write(self, ):
+    def write(self, new_settings: DefaultMunch):
         with open(self.config_path, 'w') as file:
-            yaml.dump(self.settings.toDict(), file)
+            yaml.dump(new_settings.toDict(), file)
 
     def load_graphs(self):
         self.g_overview = ox.graph_from_address(self.default['place_depo'], dist=15_000, network_type="all_private",

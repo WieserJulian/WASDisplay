@@ -17,7 +17,7 @@ class MenuBar(customtkinter.CTkFrame):
     def open_settings(self):
         if self.settings_window is None or not self.settings_window.winfo_exists():
             self.settings_window = Settings(self.master)
-            self.after(500,self.settings_window.focus_force())
+            self.settings_window.focus_force()
         else:
             self.settings_window.focus_force()
 

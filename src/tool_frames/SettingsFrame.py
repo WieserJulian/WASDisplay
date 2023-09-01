@@ -32,6 +32,8 @@ class Settings(customtkinter.CTkToplevel):
         self.address_validator = (self.register(self.validate_adr), '%P')
         title_font = customtkinter.CTkFont(size=20)
         self.debug_var = self.config.settings.default.debug
+        self.force_focus = True
+        self.bind("<FocusOut>", self.re_focus)
         # Allgemein Tab
         self.tab_frame.add("Allgemein")
         self.tab_frame.set("Allgemein")
@@ -67,6 +69,7 @@ class Settings(customtkinter.CTkToplevel):
                                                  font=title_font)
         self.printer_frame = customtkinter.CTkFrame(self.tab_frame.tab("Funktionen"))
         self.printer_frame.grid_columnconfigure(0, weight=1)
+        self.printer_active = self.config.settings.settings.printer.active
         self.printer_enable_frame = self.add_settings_frame(self.printer_frame, "Drucker Module",
                                                             customtkinter.CTkSwitch, MODULES.PRINTER,
                                                             self.config.settings.settings.printer.active, text="")
@@ -84,7 +87,14 @@ class Settings(customtkinter.CTkToplevel):
         self.save = customtkinter.CTkButton(self, text="Speichern", command=self.save_settings)
         self.save.grid(row=1, column=0, padx=5, pady=10, sticky=customtkinter.E)
 
+    def re_focus(self, _event):
+        if self.force_focus:
+            self.focus_force()
+        else:
+            self.unbind("<FocusOut>")
+
     def save_settings(self):
+        self.config.settings.settings.printer.active = self.printer_active
         self.config.settings.settings.printer.amount = int(
             self.get_entry(self.printer_piece_frame, self.config.settings.settings.printer.amount))
         self.config.settings.default.place_depo = self.get_entry(self.location_frame,
@@ -92,18 +102,19 @@ class Settings(customtkinter.CTkToplevel):
         # self.config.settings.default.request_time = int(self.get_entry(self.request_time_frame,
         #                                                            self.config.settings.default.request_time))
         if self.debug_var != self.config.settings.default.debug:
+            self.force_focus = False
             res = tkinter.messagebox.askokcancel("Restart", "Es wird ein Neustart benötigt!")
             if res:
                 self.config.settings.default.debug = bool(self.debug_var)
-                self.config.write()
+                self.config.write(self.config.settings)
                 self.destroy()
                 self.master.destroy()
                 return
             else:
                 self.destroy()
-        else:
-            self.config.write()
-            self.destroy()
+            return
+        self.config.write(self.config.settings)
+        self.destroy()
 
     def get_entry(self, frame, default_value):
         re = frame.children.get(list(frame.children.keys())[-1]).get()
@@ -131,10 +142,10 @@ class Settings(customtkinter.CTkToplevel):
         match module:
             case MODULES.PRINTER:
                 if setting.get() == 1:
-                    self.config.settings.settings.printer.active = True
+                    self.printer_active = True
                     self.printer_piece_frame.grid(row=2, column=0, padx=(30, 5), pady=5, sticky=customtkinter.NSEW)
                 else:
-                    self.config.settings.settings.printer.active = False
+                    self.printer_active = False
                     self.printer_piece_frame.grid_forget()
             case MODULES.APPEARANCE:
                 customtkinter.set_appearance_mode(setting.get())

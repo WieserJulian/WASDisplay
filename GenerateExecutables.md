@@ -2,10 +2,10 @@
 
 
 ## Generate WAS Display
-`python -m PyInstaller -F src/main.py --add-data src\config.yml;. --add-data src\assets;assets --splash project_assets/splashscreen.png --noconsole --name WASDisplay --version-file=project_assets/version-file.txt --icon project_assets/Feuerwehr.ico`
+`python -m PyInstaller src/main.py --add-data src\config.yml;. --add-data src\assets;assets --splash project_assets/splashscreen.png --noconsole --name WASDisplay --version-file=project_assets/version-file.txt --icon project_assets/Feuerwehr.ico`
 
 ## Generate TEST WAS Display
-`python -m PyInstaller -F src/main.py --add-data src\config.yml;. --add-data src\assets;assets --name WASDisplayTEST --version-file=project_assets/version-file.txt --icon project_assets/Feuerwehr.ico`
+`python -m PyInstaller src/main.py --add-data src\config.yml;. --add-data src\assets;assets --name WASDisplayTEST --version-file=project_assets/version-file.txt --icon project_assets/Feuerwehr.ico`
 
 
 
