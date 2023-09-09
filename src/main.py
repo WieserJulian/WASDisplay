@@ -1,3 +1,5 @@
+
+
 if __name__ == '__main__':
     try:
         import sys
@@ -8,12 +10,12 @@ if __name__ == '__main__':
         if getattr(sys, 'frozen', False):
             import pyi_splash
         Config()
-        # logging.basicConfig(filename='log/wasApp.log', encoding='utf-8', level=logging.DEBUG)
+        logging.basicConfig(filename='log/wasApp.log', encoding='utf-8', level=logging.INFO)
         logging.info("Start application")
         app = Display()
         if getattr(sys, 'frozen', False):
             pyi_splash.close()
         app.mainloop()
     except Exception as e:
-        print("Error", e)
+        logging.error(e)
         input()

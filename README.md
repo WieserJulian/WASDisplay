@@ -12,7 +12,7 @@ Für Testen einfach Microsoft PDf Printer auswählen als Standard
 1) Anzeigen von Einsatzname, Alarmstufe, Ort, Anrufer name, Anrufertelefonnummer, Alamierendestelle
 ![DemoBasics.png](project_assets%2FDemoBasics.png)
 2) Automatischen Ausdrucken einer PDF in der gewünschten Anzahl
-![Printer.png](project_assets%2FPrinter.png)
+![Zukunftsdruck.png](project_assets%2FZukunftsdruck.png)
 3) 
 # Einstellungen
 ![AlgEinstellungen.png](project_assets%2FAlgEinstellungen.png)

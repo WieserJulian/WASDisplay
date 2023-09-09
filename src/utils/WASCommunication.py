@@ -48,7 +48,7 @@ class WASCommunication:
                 self.client.send(b'get-alarms')
             data = self.client.recv(8192)
         except ConnectionError:
-            logging.error("[!] Couldnt connect retry")
+            logging.debug("[*] Couldnt connect retry")
             self.reconnect_and_clear()
             return
         except IOError as e:
