@@ -45,18 +45,17 @@ class WASTextFrame(CTkFrame):
         location = CTkLabel(emergency_frame, font=font, text="Ort: {}".format(emergency.location))
         location.grid(row=1, column=0, padx=20, pady=10)
 
-        caller_name = CTkLabel(emergency_frame, font=font, text="Anrufer: {}".format(emergency.name))
-        caller_name.grid(row=2, column=0, padx=20, pady=10)
+        location = CTkLabel(emergency_frame, font=font, text="Informationen: {}".format(emergency.info))
+        location.grid(row=2, column=0, padx=20, pady=10)
 
         if emergency.caller is not None:
             cal = reformat_austrian_phone_number(emergency.caller)
             caller = CTkLabel(emergency_frame, font=font, text="Telefonnummer: {}".format(cal))
             caller.grid(row=3, column=0, padx=20, pady=10)
 
-        origin = CTkLabel(emergency_frame, font=font, text="Von {}".format(emergency.origin))
-        origin.grid(row=4, column=0, padx=20, pady=10)
-
-        IDandDate = CTkLabel(emergency_frame, font=font2, text="ID: {} {}".format(emergency.id, emergency.receiveTad))
+        IDandDate = CTkLabel(emergency_frame, font=font2, text="ID: {} {} Von {}".format(emergency.id,
+                                                                                         emergency.receiveTad,
+                                                                                         emergency.origin))
         IDandDate.grid(row=5, column=0, padx=20, pady=5)
 
         status_frame = CTkFrame(emergency_frame, fg_color="red")

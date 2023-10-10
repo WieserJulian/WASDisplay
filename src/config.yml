@@ -15,5 +15,5 @@ settings:
   map:
     active: false
   printer:
-    active: false
+    active: true
     amount: 2

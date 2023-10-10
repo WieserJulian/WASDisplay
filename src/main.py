@@ -10,7 +10,7 @@ if __name__ == '__main__':
         if getattr(sys, 'frozen', False):
             import pyi_splash
         Config()
-        logging.basicConfig(filename='log/wasApp.log', encoding='utf-8', level=logging.INFO)
+        logging.basicConfig(filename='assets/log/wasApp.log', encoding='utf-8', level=logging.INFO)
         logging.info("Start application")
         app = Display()
         if getattr(sys, 'frozen', False):
